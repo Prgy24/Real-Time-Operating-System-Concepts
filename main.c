@@ -18,13 +18,13 @@ int main(void)
 {
 	OSInit();
 
-	ret = OSTaskCreate(&task_low,(void *)0,&task_Stk_low[100-1],5);
+	ret = OSTaskCreate(&task_low,(void *)0,&task_Stk_low[100-1],2);
 	if(ret != OS_ERR_NONE)
 		printf("task_low creation failed\n\r");
-	ret = OSTaskCreate(&task_medium,(void *)0,&task_Stk_medium[100-1],3);
+	ret = OSTaskCreate(&task_medium,(void *)0,&task_Stk_medium[100-1],1);
 	if(ret != OS_ERR_NONE)
 		printf("task_medium creation failed\n\r");
-	ret = OSTaskCreate(&task_high,(void *)0,&task_Stk_high[100-1],1);
+	ret = OSTaskCreate(&task_high,(void *)0,&task_Stk_high[100-1],0);
 	if(ret != OS_ERR_NONE)
 		printf("task_high creation failed\n\r");
 
@@ -77,6 +77,7 @@ void task_low(void* ar)
 	for(;;)
 	{
 	     OSSemPend(sem1, 0 , &err);
+	    OSTaskChangePrio(2,0);
 		/*if(err != OS_ERR_NONE)
 		{
 			printf("error\n\r");
@@ -84,13 +85,16 @@ void task_low(void* ar)
 		printf("IN TASK_low\n\r");
 		for(i=0; i<100; i++)
 		{
-			OSTimeDly(0.1*OS_TICKS_PER_SEC);
+			//OSTimeDly(0.1*OS_TICKS_PER_SEC);
+			printf(" %d",i);
 
 		}
 		printf("sema relesed in low\n\r");
+		OSTaskChangePrio(0,2);
 		OSSemPost(sem1);
 		OSTimeDly(1*OS_TICKS_PER_SEC);
 
 	}
 }
+
 
