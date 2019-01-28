@@ -1,112 +1,87 @@
 #include"includes.h"
-#include"stm32f10x.h"
+#include"system_stm32f10x.h"
 
-#define STACK_SIZE 100
+OS_STK task_Stk1[100];
+OS_STK task_Stk2[100];
+OS_STK task_Stk3[100];
+OS_STK task_Stk4[100];
 
-OS_STK task_stk1[STACK_SIZE];
-OS_STK task_stk2[STACK_SIZE];
-OS_STK task_stk3[STACK_SIZE];
-OS_STK task_stk4[STACK_SIZE];
-OS_STK task_stk5[STACK_SIZE];
 
 void task1(void *arg);
 void task2(void *arg);
 void task3(void *arg);
 void task4(void *arg);
-void task5(void *arg);
 
+INT8U ret;
 
 int main(void)
 {
-	INT8U ret;
 	OSInit();
-
-	ret = OSTaskCreate(&task1, (void*)0, &task_stk1[STACK_SIZE - 1], 1);
+	ret = OSTaskCreate(&task1,(void *)0,&task_Stk1[100-1],1);
 	if(ret != OS_ERR_NONE)
-		printf("Task1 creation failed..\n\r");
+		printf("task1 creation failed\n\r");
 
 	OSStart();
 
     while(1)
     {
-    	printf("Hello..\n\r");
     }
 }
 
-void task1(void *arg)
+void task1(void* ar)
 {
-	INT8U ret;
-
 	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
-
-	ret = OSTaskCreate(&task2, (void*)0, &task_stk2[STACK_SIZE - 1], 2);
+	ret = OSTaskCreate(&task2,(void *)0,&task_Stk2[100-1],2);
 	if(ret != OS_ERR_NONE)
-		printf("Task2 creation failed..\n\r");
+		printf("task2 creation failed\n\r");
 
-	for( ; ; )
-	{
-		printf("In Task1..\n\r");
-		OSTimeDly(0.2*OS_TICKS_PER_SEC);
-	}
-}
-void task2(void *arg)
-{
-	INT8U ret;
-
-	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
-
-	ret = OSTaskCreate(&task3, (void*)0, &task_stk3[STACK_SIZE - 1], 3);
+	ret = OSTaskCreate(&task3,(void *)0,&task_Stk3[100-1],3);
 	if(ret != OS_ERR_NONE)
-		printf("Task2 creation failed..\n\r");
+		printf("task3 creation failed\n\r");
 
-	for( ; ; )
-	{
-		printf("In Task2..\n\r");
-		OSTimeDly(0.4*OS_TICKS_PER_SEC);
-	}
-}
-void task3(void *arg)
-{
-	INT8U ret;
-
-	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
-
-	ret = OSTaskCreate(&task4, (void*)0, &task_stk4[STACK_SIZE - 1], 4);
+	ret = OSTaskCreate(&task4,(void *)0,&task_Stk4[100-1],4);
 	if(ret != OS_ERR_NONE)
-		printf("Task1 creation failed..\n\r");
+		printf("task4 creation failed\n\r");
 
-	for( ; ; )
+	for(;;)
 	{
-		printf("In Task3..\n\r");
-		OSTimeDly(0.6*OS_TICKS_PER_SEC);
-	}
-}
-void task4(void *arg)
-{
-	INT8U ret;
-
-	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
-
-	ret = OSTaskCreate(&task5, (void*)0, &task_stk5[STACK_SIZE - 1], 5);
-	if(ret != OS_ERR_NONE)
-		printf("Task2 creation failed..\n\r");
-
-	for( ; ; )
-	{
-		printf("In Task4..\n\r");
-		OSTimeDly(0.8*OS_TICKS_PER_SEC);
-	}
-}
-
-void task5(void *arg)
-{
-	INT8U ret;
-
-	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
-
-	for( ; ; )
-	{
-		printf("In Task5..\n\r");
+		printf("IN TASK1\n\r");
 		OSTimeDly(1*OS_TICKS_PER_SEC);
 	}
 }
+
+void task2(void* ar)
+{
+	INT8U cond=0;
+
+	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
+	for(;;)
+	{
+		printf("IN TASK2\n\r");
+		OSTaskDel(OS_PRIO_SELF);
+	}
+}
+
+void task3(void* ar)
+{
+	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
+	for(;;)
+	{
+		printf("IN TASK3\n\r");
+		OSTaskDel(OS_PRIO_SELF);
+	}
+}
+
+void task4(void* ar)
+{
+	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
+	for(;;)
+	{
+		printf("IN TASK4\n\r");
+		OSTaskDel(OS_PRIO_SELF);
+	}
+}
+
+
+
+
