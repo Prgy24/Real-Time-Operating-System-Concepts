@@ -11,9 +11,9 @@ void task_low(void *arg);
 void task_medium(void *arg);
 void task_high(void *arg);
 
-OS_EVENT *sem1;
+OS_EVENT *Mutex;
 
-INT8U ret;
+INT8U ret,err;
 int main(void)
 {
 	OSInit();
@@ -28,7 +28,7 @@ int main(void)
 	if(ret != OS_ERR_NONE)
 		printf("task_high creation failed\n\r");
 
-	sem1 = OSSemCreate(1);
+	Mutex = OSMutexCreate(0, &err);
 	OSStart();
 
     while(1)
@@ -44,12 +44,11 @@ void task_high(void* ar)
 	for(;;)
 	{
 		OSTimeDly(1*OS_TICKS_PER_SEC);
-
-		OSSemPend(sem1, 0 , &err);
+		OSMutexPend(Mutex, 0, &err);
 
 		printf("IN TASK_high\n\r");
-		OSSemPost(sem1);
 
+		OSMutexPost(Mutex);
 		OSTimeDly(1*OS_TICKS_PER_SEC);
 
 	}
@@ -76,8 +75,8 @@ void task_low(void* ar)
 	INT8U i, count=0, err, res;
 	for(;;)
 	{
-	     OSSemPend(sem1, 0 , &err);
-	    OSTaskChangePrio(2,0);
+		 OSMutexPend(Mutex, 0, &err);
+
 		/*if(err != OS_ERR_NONE)
 		{
 			printf("error\n\r");
@@ -90,11 +89,11 @@ void task_low(void* ar)
 
 		}
 		printf("sema relesed in low\n\r");
-		OSTaskChangePrio(0,2);
-		OSSemPost(sem1);
+		OSMutexPost(Mutex);
 		OSTimeDly(1*OS_TICKS_PER_SEC);
 
 	}
 }
+
 
 
