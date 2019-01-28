@@ -1,86 +1,82 @@
-
 #include"includes.h"
 #include"system_stm32f10x.h"
+#include"OS_cpu.h"
 
-OS_STK task_master[100];
-OS_STK task_slave1[100];
-OS_STK task_slave2[100];
+void pro1(void *arg);
+void pro2(void *arg);
+void con(void *arg);
 
+#define STACK_SIZE 100
+OS_STK task_stk1[100];
+OS_STK task_stk2[100];
+OS_STK task_stk3[100];
 
-
-void master(void *arg);
-void slave1(void *arg);
-void slave2(void *arg);
-
-
-INT8U ret;
+INT8U a=0, i;
 
 int main(void)
 {
+	INT8U ret;
 	OSInit();
-
-	ret = OSTaskCreate(&slave1,(void *)0,&task_slave1[100-1], 0);
-	if(ret != OS_ERR_NONE)
-		printf("slave1 creation failed\n\r");
-
-	ret = OSTaskCreate(&slave2,(void *)0,&task_slave2[100-1], 1);
-	if(ret != OS_ERR_NONE)
-		printf("slave2 creation failed\n\r");
-
-	ret = OSTaskCreate(&master,(void *)0,&task_master[100-1], 2);
-		if(ret != OS_ERR_NONE)
-			printf("master creation failed\n\r");
+	ret=OSTaskCreate(&pro1,(void *)0,&task_stk1[100-1],1);
+	if(ret!=OS_ERR_NONE)
+	{
+		printf("task(producer 1) creation failed\n\r");
+	}
+	ret=OSTaskCreate(&pro2,(void *)0,&task_stk2[100-1],2);
+	if(ret!=OS_ERR_NONE)
+	{
+		printf("task(producer 2) creation failed\n\r");
+	}
+	ret=OSTaskCreate(&con,(void *)0,&task_stk3[100-1],0);
+	if(ret!=OS_ERR_NONE)
+	{
+		printf("task(consumer) creation failed\n\r");
+	}
 
 	OSStart();
-
     while(1)
     {
-    	printf("Hi...\n\r");
+    	printf("hello..\n\r");
     }
 }
 
 
-void slave1(void* ar)
+void pro1(void *arg)
 {
-	//OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
-
-	for(;;)
+	OS_CPU_SR cpu_sr;
+	for( ; ; )
 	{
-		printf("IN slave1\n\r");
-		//OSTimeDly(1*OS_TICKS_PER_SEC);
-		OSTaskSuspend(0);
+		printf("producer 1\n\r");
+		OS_ENTER_CRITICAL();
+		a = a+10;
+		OS_EXIT_CRITICAL();
+		OSTimeDly(5*OS_TICKS_PER_SEC);
 	}
+
 }
 
-
-void slave2(void* ar)
+void pro2(void *arg)
 {
-	//OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
-
-	for(;;)
+	OS_CPU_SR cpu_sr;
+	for( ; ; )
 	{
-		printf("IN slave2\n\r");
-		//OSTimeDly(1*OS_TICKS_PER_SEC);
-		OSTaskSuspend(1);
+		printf("producer 2\n\r");
+		OS_ENTER_CRITICAL();
+		a = a+5;
+		OS_EXIT_CRITICAL();
+		OSTimeDly(0.7*OS_TICKS_PER_SEC);
 	}
+
 }
 
-
-void master(void* ar)
+void con(void *arg)
 {
-
 	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
-
-	for(;;)
+	for( ; ; )
 	{
-		printf("IN master\n\r");
-
-		 OSTimeDly(0.5*OS_TICKS_PER_SEC);
-		 OSTaskResume(0);
-		 OSTimeDly(0.7*OS_TICKS_PER_SEC);
-		 OSTaskResume(1);
+		printf("consumer\n\r");
+		printf("%d\n\r",a);
+		OSTimeDly(2*OS_TICKS_PER_SEC);
 	}
+
 }
-
-
-

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Project version="2G - 1.7.8" name="producer_consumer">
+  <Target name="producer_consumer" isCurrent="1">
+    <Device manufacturerId="9" manufacturerName="ST" chipId="257" chipName="STM32F100RB" boardId="" boardName=""/>
+    <BuildOption>
+      <Compile>
+        <Option name="OptimizationLevel" value="0"/>
+        <Option name="UseFPU" value="0"/>
+        <Option name="UserEditCompiler" value=""/>
+        <Option name="SupportCPlusplus" value="0"/>
+        <Includepaths>
+          <Includepath path="."/>
+        </Includepaths>
+        <DefinedSymbols>
+          <Define name="STM32F100RB"/>
+          <Define name="STM32F10X_MD_VL"/>
+        </DefinedSymbols>
+      </Compile>
+      <Link useDefault="0">
+        <Option name="DiscardUnusedSection" value="0"/>
+        <Option name="UserEditLinkder" value=""/>
+        <Option name="UseMemoryLayout" value="1"/>
+        <Option name="nostartfiles" value="1"/>
+        <Option name="LTO" value="0"/>
+        <Option name="IsNewStartupCode" value="1"/>
+        <Option name="Library" value="Not use C Library"/>
+        <LinkedLibraries/>
+        <MemoryAreas debugInFlashNotRAM="1">
+          <Memory name="IROM1" type="ReadOnly" size="0x00020000" startValue="0x08000000"/>
+          <Memory name="IRAM1" type="ReadWrite" size="0x00002000" startValue="0x20000000"/>
+          <Memory name="IROM2" type="ReadOnly" size="" startValue=""/>
+          <Memory name="IRAM2" type="ReadWrite" size="" startValue=""/>
+        </MemoryAreas>
+        <LocateLinkFile path="../../../../../../coocox/coide/configuration/programdata/producer_consumer/arm-gcc-link.ld" type="0"/>
+      </Link>
+      <Output>
+        <Option name="OutputFileType" value="0"/>
+        <Option name="Path" value="./"/>
+        <Option name="Name" value="producer_consumer"/>
+        <Option name="HEX" value="1"/>
+        <Option name="BIN" value="1"/>
+      </Output>
+      <User>
+        <UserRun name="Run#1" type="Before" checked="0" value=""/>
+        <UserRun name="Run#1" type="After" checked="0" value=""/>
+      </User>
+    </BuildOption>
+    <DebugOption>
+      <Option name="org.coocox.codebugger.gdbjtag.core.adapter" value="ST-Link"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="SWD"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.clockDiv" value="1M"/>
+      <Option name="org.coocox.codebugger.gdbjtag.corerunToMain" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkgdbserver" value=""/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.userDefineGDBScript" value=""/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.targetEndianess" value="0"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkResetMode" value="Type 0: Normal"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.resetMode" value="SYSRESETREQ"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifSemihost" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifCacheRom" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ipAddress" value="127.0.0.1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.portNumber" value="2009"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.autoDownload" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="STM32F10x_MD_128.elf"/>
+    </DebugOption>
+    <ExcludeFile/>
+  </Target>
+  <Components path="./">
+    <Component id="31" name="Retarget printf" path="" type="2"/>
+    <Component id="33" name="Semihosting" path="" type="2"/>
+    <Component id="50" name="CMSIS core" path="" type="2"/>
+    <Component id="464" name="CMSIS Boot" path="" type="2"/>
+  </Components>
+  <Files>
+    <File name="cmsis_boot/ucos_stm32/app_cfg.h" path="../../../ucos_stm32/app_cfg.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/cpu_def.h" path="../../../ucos_stm32/cpu_def.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/lib_str.c" path="../../../ucos_stm32/lib_str.c" type="1"/>
+    <File name="cmsis_boot" path="" type="2"/>
+    <File name="cmsis_boot/ucos_stm32/cpu_core.h" path="../../../ucos_stm32/cpu_core.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_cpu_c.c" path="../../../ucos_stm32/os_cpu_c.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_mbox.c" path="../../../ucos_stm32/os_mbox.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_time.c" path="../../../ucos_stm32/os_time.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_cfg.h" path="../../../ucos_stm32/os_cfg.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/lib_math.c" path="../../../ucos_stm32/lib_math.c" type="1"/>
+    <File name="semihosting/sh_cmd.s" path="semihosting/sh_cmd.s" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/cpu_core.c" path="../../../ucos_stm32/cpu_core.c" type="1"/>
+    <File name="cmsis/core_cmFunc.h" path="cmsis/core_cmFunc.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/lib_mem.h" path="../../../ucos_stm32/lib_mem.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/cpu_c.c" path="../../../ucos_stm32/cpu_c.c" type="1"/>
+    <File name="semihosting/semihosting.c" path="semihosting/semihosting.c" type="1"/>
+    <File name="cmsis_boot/stm32f10x.h" path="cmsis_boot/stm32f10x.h" type="1"/>
+    <File name="cmsis_boot/stm32f10x_conf.h" path="cmsis_boot/stm32f10x_conf.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/includes.h" path="../../../ucos_stm32/includes.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_sem.c" path="../../../ucos_stm32/os_sem.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/lib_mem.c" path="../../../ucos_stm32/lib_mem.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32" path="" type="2"/>
+    <File name="cmsis_boot/ucos_stm32/ucos_ii.h" path="../../../ucos_stm32/ucos_ii.h" type="1"/>
+    <File name="stdio/printf.c" path="stdio/printf.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/lib_math.h" path="../../../ucos_stm32/lib_math.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/app_hooks.c" path="../../../ucos_stm32/app_hooks.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_flag.c" path="../../../ucos_stm32/os_flag.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/cpu.h" path="../../../ucos_stm32/cpu.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_mem.c" path="../../../ucos_stm32/os_mem.c" type="1"/>
+    <File name="cmsis_boot/system_stm32f10x.c" path="cmsis_boot/system_stm32f10x.c" type="1"/>
+    <File name="stdio" path="" type="2"/>
+    <File name="cmsis_boot/ucos_stm32/os_cpu_a.S" path="../../../ucos_stm32/os_cpu_a.S" type="1"/>
+    <File name="cmsis/core_cmInstr.h" path="cmsis/core_cmInstr.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_tmr.c" path="../../../ucos_stm32/os_tmr.c" type="1"/>
+    <File name="cmsis/core_cm3.h" path="cmsis/core_cm3.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_dbg.c" path="../../../ucos_stm32/os_dbg.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/startup_stm32f10x_md_vl.c" path="../../../ucos_stm32/startup_stm32f10x_md_vl.c" type="1"/>
+    <File name="semihosting" path="" type="2"/>
+    <File name="cmsis_boot/ucos_stm32/os_cpu.h" path="../../../ucos_stm32/os_cpu.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_q.c" path="../../../ucos_stm32/os_q.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/lib_def.h" path="../../../ucos_stm32/lib_def.h" type="1"/>
+    <File name="cmsis" path="" type="2"/>
+    <File name="cmsis_boot/ucos_stm32/cpu_cfg.h" path="../../../ucos_stm32/cpu_cfg.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/cpu_a.s" path="../../../ucos_stm32/cpu_a.s" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/lib_ascii.h" path="../../../ucos_stm32/lib_ascii.h" type="1"/>
+    <File name="cmsis_boot/system_stm32f10x.h" path="cmsis_boot/system_stm32f10x.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/lib_ascii.c" path="../../../ucos_stm32/lib_ascii.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/lib_str.h" path="../../../ucos_stm32/lib_str.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_core.c" path="../../../ucos_stm32/os_core.c" type="1"/>
+    <File name="semihosting/semihosting.h" path="semihosting/semihosting.h" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_task.c" path="../../../ucos_stm32/os_task.c" type="1"/>
+    <File name="cmsis_boot/ucos_stm32/os_mutex.c" path="../../../ucos_stm32/os_mutex.c" type="1"/>
+    <File name="main.c" path="main.c" type="1"/>
+  </Files>
+</Project>
