@@ -4,52 +4,36 @@
 
 void task1(void *arg);
 void task2(void *arg);
-void task3(void *arg);
-void task4(void *arg);
-void task5(void *arg);
-void task6(void *arg);
-
 
 #define STACK_SIZE 100
 
-OS_STK task_stk1[100];
-OS_STK task_stk2[100];
-OS_STK task_stk3[100];
-OS_STK task_stk4[100];
-OS_STK task_stk5[100];
-OS_STK task_stk6[100];
+OS_STK task_stk1[STACK_SIZE];
+OS_STK task_stk2[STACK_SIZE];
 
-OS_FLAG_GRP *Task_start;
-OS_FLAGS flag;
+OS_EVENT *mybox;
+INT8U data[20];
 
-#define flag_1 0x01
-#define flag_2 0x02
-
-INT8U a=0, i, j, ch, num;
-
+void *msg;
 
 int main(void)
 {
 	INT8U ret, err;
 	OSInit();
-	ret=OSTaskCreate(&task1,(void *)0,&task_stk1[100-1],1);
-	if(ret!=OS_ERR_NONE)
-		printf("task(producer 1) creation failed\n\r");
 
-	ret=OSTaskCreate(&task2,(void *)0,&task_stk2[100-1],4);
+	ret=OSTaskCreate(&task1, (void *)0 , &task_stk1[STACK_SIZE-1] , 0);
 	if(ret!=OS_ERR_NONE)
-	{
-		printf("task(producer 2) creation failed\n\r");
-	}
-	ret=OSTaskCreate(&task3,(void *)0,&task_stk3[100-1],5);
+		printf("Producer creation failed\n\r");
+
+	ret=OSTaskCreate(&task2, (void *)0 , &task_stk2[STACK_SIZE-1] , 1);
 	if(ret!=OS_ERR_NONE)
 	{
-		printf("task(consumer) creation failed\n\r");
+		printf("Consumer creation failed\n\r");
 	}
 
-	Task_start = OSFlagCreate(0x00, &err);
-
+	mybox = OSMboxCreate((void *)0);
+	printf("%d\n\r", mybox);
 	OSStart();
+
     while(1)
     {
     	printf("hello..\n\r");
@@ -59,115 +43,46 @@ int main(void)
 
 void task1(void *arg)
 {
-	INT8U time, ret, err;
+	INT8U err, buff[20];
+	void *msg;
+
+	OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
 
 	for( ; ; )
 	{
-		OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
 		printf("task 1\n\r");
-		OSTimeDly(0.5*OS_TICKS_PER_SEC);
-		flag = OSFlagPend(Task_start, flag_1+flag_2, OS_FLAG_WAIT_SET_ALL, 100, &err);
 
-		if(flag)
-		{
-			time = OSTimeGet();
-			printf("The timer after two flags are set %d\n\r", time);
+		strcpy(data,"Hello Sneha");
+		OSMboxPost(mybox, (void*)&data);
 
-			ret=OSTaskCreate(&task4,(void *)0,&task_stk4[100-1],4);
-				if(ret!=OS_ERR_NONE)
-				{
-					printf("task4 creation failed\n\r");
-				}
-				ret=OSTaskCreate(&task5,(void *)0,&task_stk5[100-1],5);
-				if(ret!=OS_ERR_NONE)
-				{
-					printf("task5 creation failed\n\r");
-				}
-				ret=OSTaskCreate(&task6,(void *)0,&task_stk6[100-1],6);
-				if(ret!=OS_ERR_NONE)
-				{
-					printf("task6 creation failed\n\r");
-				}
-		    OSTaskDel(OS_PRIO_SELF);
-		}
+		/*msg = OSMboxPend(mybox, 100, &err);
+		if(msg==0)
+		   printf("Error \n\r");
+		else
+		strcpy(buff,(INT8U*)msg);*/
+		printf("Message is: %s\n\r", data);
+		OSTimeDly(1*OS_TICKS_PER_SEC);
 	}
 }
-
 void task2(void *arg)
 {
-	INT8U err;
-	for( ; ; )
-	{
-		printf("task2 \n\r");
+		INT8U err, buff[20];
+		void *msg;
 
-		for(ch=65; ch<=91; ch++)
+		OS_CPU_SysTickInit(SystemCoreClock/OS_TICKS_PER_SEC);
+
+		for( ; ; )
 		{
-			for(i=0; i<5; i++)
-			{
-				if((ch+i) == 'Z')
-				{
-					printf("%c \t\r", ch+i);
-					goto label;
-				}
-				else
-					printf("%c \t\r", ch+i);
-			}
-			ch = ch+i-1;
-			printf("\n\r");
-			OSTimeDly(0.5*OS_TICKS_PER_SEC);
+			printf("task 2\n\r");
+
+			msg = OSMboxPend(mybox, 0 , &err);
+
+			if(msg==0)
+			   printf("Error \n\r");
+			else
+			strcpy(buff,(INT8U*)msg);
+
+			printf("Message is: %s\n\r", buff);
+			OSTimeDly(1*OS_TICKS_PER_SEC);
 		}
-label:
-		flag = OSFlagPost(Task_start, flag_1, OS_FLAG_SET, &err);
-		OSTaskDel(OS_PRIO_SELF);
-
-	}
 }
-
-void task3(void *arg)
-{
-	INT8U err;
-	for( ; ; )
-	{
-		printf("task3 \n\r");
-		for(num=1; num<=50; num++)
-		{
-			for(i=0; i<10; i++)
-			{
-				printf("%d \t\r", num+i);
-			}
-			num = num+i-1;
-			printf("\n\r");
-			OSTimeDly(0.6*OS_TICKS_PER_SEC);
-		}
-		flag = OSFlagPost(Task_start, flag_2, OS_FLAG_SET, &err);
-		OSTaskDel(OS_PRIO_SELF);
-	}
-}
-
-void task4(void *arg)
-{
-	for(;;)
-	{
-		printf("In dynamic task1 \n\r");
-		OSTimeDly(1*OS_TICKS_PER_SEC);
-	}
-}
-
-void task5(void *arg)
-{
-	for(;;)
-	{
-		printf("In dynamic task2 \n\r");
-		OSTimeDly(1*OS_TICKS_PER_SEC);
-	}
-}
-
-void task6(void *arg)
-{
-	for(;;)
-	{
-		printf("In dynamic task3 \n\r");
-		OSTimeDly(1*OS_TICKS_PER_SEC);
-	}
-}
-
